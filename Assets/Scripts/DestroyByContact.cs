@@ -11,7 +11,15 @@ public class DestroyByContact : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //GameObject gameControllerObject = GameObject.FindWithTag("GameController");
+        GameObject gameControllerObject = GameObject.FindWithTag("GameController");
+        if(gameControllerObject != null)
+        {
+            gameControllerScript = gameControllerObject.GetComponent<GameController>();
+        }
+        if(gameControllerObject == null)
+        {
+            Debug.Log("Can not find game controller script on Game Controller Object");
+        }
     }
 
     // Update is called once per frame
@@ -22,6 +30,11 @@ public class DestroyByContact : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D other)
     {
         // something has collided
+        if (other.gameObject.CompareTag("Player"))
+        {
+            Instantiate(explosion, other.transform.position, other.transform.rotation);
+            gameControllerScript.GameOver();
+        }
         // create an explosion // animation of explosion // Line 2: Add to score
         Instantiate(explosion, transform.position, transform.rotation);
         gameControllerScript.AddtoScore(scoreValue);
